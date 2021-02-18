@@ -12,9 +12,11 @@
 		<div id="textNtvLng"></div><br>
 		<div id="image"></div><br>
 		<textarea id="txtAns" style="display: none"></textarea><br><br>
-		<button id="btnSend"  style="display: none">send</button><br>
-		<button id="btnTrain" style="display: none">train</button><br>
-		<button id="btnNext" onclick="nextCard()">next</button><br>
+		<div id="textRes"></div><br>
+		<button id="btnCheck"  onclick="check()" style="display: none">check</button><br>
+		<button id="btnTrain" onclick="loadTraining()" style="display: none">train</button><br>
+		<button id="btnNextMemo" onclick="nextCard()">next</button><br>
+		<button id="btnNextQst" onclick="nextQuestion()" style="display: none">next</button><br>
 	</body>
 	<script>
 		//DOM OBJECTS
@@ -23,11 +25,14 @@
 		ntvLng   = document.getElementById("textNtvLng");
 		mnImg    = document.getElementById("image");
 		txtAns   = document.getElementById("txtAns");
-		btnSend  = document.getElementById("btnSend");
+		txtRes   = document.getElementById("textRes");
+		btnCheck = document.getElementById("btnCheck");
 		btnTrain = document.getElementById("btnTrain");
-		btnNext  = document.getElementById("btnNext");
+		btnNextMemo  = document.getElementById("btnNextMemo");
+		btnNextQst   = document.getElementById("btnNextQst");
 		//JS INIT
-		pos   = 0;
+		posRe = 0;
+		posTr = 0;
 		topic = 0;
 		//LOAD CARDS
 		cards = [{"tgt":"I ate [eɪt] in the morning",
@@ -40,25 +45,64 @@
 					"qst" : "I ... yesterday",
 					"answers":["ran"],
 					"img": "ran2.png"}];
+		//ENTRY POINT
+		document.onload = loadLesson();
 		//FUNCTIONS
-		function lessonLoad () {
-			
+		function loadLesson() {
+			tgtLng.innerText = cards[posRe].tgt;
+			ntvLng.innerText = cards[posRe].ntv;
 		}
-		function nextCard () {
+		function nextCard() {
 			console.log(cards.length);
-			if (pos <= cards.length-2) {
-				pos     = pos + 1;
-				tgtLng.innerText = cards[pos].tgt;
-				ntvLng.innerText = cards[pos].ntv;
-				//mnImg.innerHTML = "<img src='"+cards[pos].img+"'>";
+			if (posRe <= cards.length-2) {
+				posRe     = posRe + 1;
+				tgtLng.innerText = cards[posRe].tgt;
+				ntvLng.innerText = cards[posRe].ntv;
+				//mnImg.innerHTML = "<img src='"+cards[posRe].img+"'>";
 			}
-			if (pos = cards.length-1) {
-				btnNext.style = "display: none";
+			if (posRe === cards.length-1) {
+				btnNextMemo.style  = "display: none";
 				btnTrain.style = "display: block";
 			}
 		}
 		function loadTraining() {
-			
+			posTr = 0;
+			tgtLng.innerText   = cards[posTr].qst;
+			ntvLng.innerText   = cards[posTr].ntv;
+			btnTrain.style     = "display: none";
+			btnNextMemo.style  = "display: none";
+			btnCheck.style     = "display: block";
+			txtAns.style       = "display: block";
+			txtAns.value       = "";
+			btnNextQst.style   = "display: block";
+		}
+		
+		function check() {
+			if (inArray(txtAns.value, cards[posTr].answers)){
+				txtRes.innerText="True!"
+			} else {
+				txtRes.innerHTML = "False! Correst answer is "+cards[posTr].answers[0]+"<br>"+cards[posTr].tgt;
+			}
+		}
+		function nextQuestion() {
+			posTr = posTr+1;
+			txtRes.innerText = "";
+			txtAns.value     = "";
+			tgtLng.innerText = cards[posTr].qst;
+			ntvLng.innerText = cards[posTr].ntv;
+			if (posTr === cards.length-1) {
+				btnNextQst.style = "display: none";
+			}
+		}
+		//HELPERS
+		function inArray(needle,haystack){
+			console.log(needle)
+			console.log(haystack)
+			count=haystack.length;
+			for(var i=0;i<count;i++){
+				if(haystack[i]===needle){return true;}
+			}
+			return false;
 		}
 	</script>
 </html>
