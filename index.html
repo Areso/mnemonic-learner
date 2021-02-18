@@ -1,18 +1,64 @@
 <html>
+	<head>
+	<link rel="shortcut icon" id="gameIcon" type="image/x-icon" href="favicon-normal.png">
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>
+		Mnemonic Learner
+	</title>
+	</head>
 	<body>
-		<div id="divTopic">Irregular verbs</div>
+		<div id="textTopic">Irregular verbs</div><br>
 		<div id="textTgtLng"></div><br>
 		<div id="textNtvLng"></div><br>
 		<div id="image"></div><br>
-		<textarea id="txtArea"></textarea><br><br>
+		<textarea id="txtAns" style="display: none"></textarea><br><br>
 		<button id="btnSend"  style="display: none">send</button><br>
 		<button id="btnTrain" style="display: none">train</button><br>
-		<button id="btnNext">train</button><br>
+		<button id="btnNext" onclick="nextCard()">next</button><br>
 	</body>
 	<script>
+		//DOM OBJECTS
+		topic    = document.getElementById("textTopic");
+		tgtLng   = document.getElementById("textTgtLng");
+		ntvLng   = document.getElementById("textNtvLng");
+		mnImg    = document.getElementById("image");
+		txtAns   = document.getElementById("txtAns");
+		btnSend  = document.getElementById("btnSend");
+		btnTrain = document.getElementById("btnTrain");
+		btnNext  = document.getElementById("btnNext");
+		//JS INIT
 		pos   = 0;
-		cards = [{"tgt":"I ate [eɪt] in the morning", "ntv":"Я ел утром", "answers":["ate"], "img":"ate2.png"},
-				{"tgt":"I ran [ræn] yesterday", "ntv":"Я бегал вчера", "answers":["ran"], "img": "ran2.png"}];
-		
+		topic = 0;
+		//LOAD CARDS
+		cards = [{"tgt":"I ate [eɪt] in the morning",
+					"ntv":"Я ел утром",
+					"qst" : "I ... in the morning",
+					"answers":["ate"],
+					"img":"ate2.png"},
+				{"tgt":"I ran [ræn] yesterday",
+					"ntv":"Я бегал вчера",
+					"qst" : "I ... yesterday",
+					"answers":["ran"],
+					"img": "ran2.png"}];
+		//FUNCTIONS
+		function lessonLoad () {
+			
+		}
+		function nextCard () {
+			console.log(cards.length);
+			if (pos <= cards.length-2) {
+				pos     = pos + 1;
+				tgtLng.innerText = cards[pos].tgt;
+				ntvLng.innerText = cards[pos].ntv;
+				//mnImg.innerHTML = "<img src='"+cards[pos].img+"'>";
+			}
+			if (pos = cards.length-1) {
+				btnNext.style = "display: none";
+				btnTrain.style = "display: block";
+			}
+		}
+		function loadTraining() {
+			
+		}
 	</script>
 </html>
